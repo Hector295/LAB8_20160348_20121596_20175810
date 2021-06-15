@@ -10,6 +10,41 @@
     <link rel="stylesheet" href="./index.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="./index.js"></script>
+
+    <script>
+        $(document).ready(function (){
+            $.get("https://api.covid19api.com/summary").done(function (data){
+                $("#date").text(data.Global.Date);
+                $("#newConfirmed").text(data.Global.NewConfirmed);
+                $("#newDeaths").text(data.Global.NewDeaths);
+                $("#newRecovered").text(data.Global.NewRecovered);
+                $("#totalConfirmed").text(data.Global.TotalConfirmed);
+                $("#totalDeaths").text(data.Global.TotalDeaths);
+                $("#totalRecovered").text(data.Global.TotalRecovered);
+
+                var listaPaises = data.Countries;
+                var html = "";
+
+                $.each(listaPaises, function (indice, pais) {
+                    html += "<tr>";
+                    html += "<td>" + (indice + 1) + "</td>";
+                    html += "<td>" + pais.Country + "</td>";
+                    html += "<td>" + pais.TotalConfirmed + "</td>";
+                    html += "<td>" + pais.TotalDeaths + "</td>";
+                    html += "<td>" + pais.TotalRecovered + "</td>";
+                    html += "<td>" + pais.NewConfirmed + "</td>";
+                    html += "<td>" + pais.NewDeaths + "</td>";
+                    html += "<td>" + pais.NewRecovered + "</td>";
+                    html += "<td><a class=\"btn btn-primary\" th:href=\"@{'/detallePais/detallePais.html?name='" + pais.Country + "&slug=" + pais.Slug + "&countryCode=" + pais.CountryCode + "}\">Ver Detalles</a>\n" + "</td>";
+                    html += "</tr>";
+                });
+                $("#body-paises").html(html);
+            }).fail(function (error){
+                alert("Error");
+            });
+        })
+    </script>
+
 </head>
 
 <body>
@@ -17,7 +52,7 @@
         <h1 class="mb-3">OMS - COVID-19</h1>
         <hr />
         <div>
-            <h3 id="titulo-resumen-global">Resumen Global - </h3>
+            <h3 id="titulo-resumen-global">Resumen Global</h3>
             <table class="table">
                 <thead>
                     <tr>
